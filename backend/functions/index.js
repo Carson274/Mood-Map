@@ -19,8 +19,10 @@ exports.addMood = onRequest(async (req, res) => {
   // Log the start of the function
   logger.info("addMood function triggered", { structuredData: true });
 
-  // Get the mood rating from the request body
+  // Get the mood data from the request body
   const mood = req.body.mood;
+  const description = req.body.description;
+  const userID = req.body.userID;
 
   // Log the request and the mood
   logger.info("Request body", { structuredData: true });
@@ -30,23 +32,32 @@ exports.addMood = onRequest(async (req, res) => {
   logger.info("Mood rating", { structuredData: true });
   logger.info(mood, { structuredData: true });
 
-  // Validate the mood rating - IMPORTANT
+  // - Validate the data before formatting -
+  logger.info("Validating mood data", { structuredData: true });
+
+  // #1 - mood: number
   if (typeof mood !== "number" || mood < 1 || mood > 10) {
     res.status(400).send({ error: 'Invalid mood rating' });
     return;
   }
 
-  logger.info("Creating mood data", { structuredData: true });
+  //  #2 - description: string
+  if (typeof description !== "string") {
+    res.status(400).send({ error: 'Invalid description' });
+    return;
+  }
 
   // Create the format for the mood data
+  logger.info("Creating mood data", { structuredData: true });
   const moodData = {
     mood: mood,
+    description: description,
     timestamp: admin.firestore.FieldValue.serverTimestamp(),
+    userID: userID,
   };
 
-  logger.info("Adding mood data to Firestore", { structuredData: true });
-
   // Add the mood data to the Firestore database
+  logger.info("Adding mood data to Firestore", { structuredData: true });
   try {
     const docRef = db.collection("moods").doc();
     await docRef.set(moodData);
@@ -57,3 +68,4 @@ exports.addMood = onRequest(async (req, res) => {
     res.status(500).send({ error: "Error adding mood" });
   }
 });
+
