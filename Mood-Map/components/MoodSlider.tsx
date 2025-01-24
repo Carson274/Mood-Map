@@ -1,9 +1,11 @@
-import { Text, View, Button } from "react-native";
+import { Text, View, Button, TextInput } from "react-native";
 import Slider from '@react-native-community/slider';
 import { useState } from "react";
 
 export default function MoodSlider() {
   const [mood, setMood] = useState(5);
+  const [description, setDescription] = useState("");
+  const userID = "carpetID"; // Unique ID - to be implemented
 
   // https://addmood-fpfgzzqxca-uc.a.run.app
 
@@ -13,7 +15,7 @@ export default function MoodSlider() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ mood }),
+      body: JSON.stringify({ mood, description, userID }),
     });
   }
 
@@ -36,6 +38,12 @@ export default function MoodSlider() {
         value={9}
         onValueChange={value => setMood(value)}
         step={1}
+      />
+      <Text>Why do you feel this way?</Text>
+      <TextInput
+        onChangeText={text => setDescription(text)}
+        value={description}
+        placeholder="Share your thoughts"
       />
       <Button
         title="Submit"
