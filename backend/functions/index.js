@@ -69,3 +69,28 @@ exports.addMood = onRequest(async (req, res) => {
   }
 });
 
+exports.getMoods = onRequest(async (req, res) => {
+  // Log the start of the function
+  logger.info("getMoods function triggered", { structuredData: true });
+
+  // Get the userID from the request body
+  const userID = req.query.userID;
+
+  if (!userID) {
+    res.status(400).send({ error: 'Missing userID parameter' });
+    return;
+  }
+
+  // Retrieve the moods from the Firestore database
+  try {
+    const moods = [];
+    const querySnapshot = await db.collection("moods").where("userID", "==", userID).get();
+    querySnapshot.forEach((doc) => {
+      moods.push(doc.data());
+    });
+    res.status(200).send(moods);
+  } catch (e) {
+    logger.error("Error getting moods", e);
+    res.status(500).send({ error: "Error getting moods" });
+  }
+});
