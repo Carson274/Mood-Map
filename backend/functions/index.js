@@ -86,7 +86,9 @@ exports.getMoods = onRequest(async (req, res) => {
     const moods = [];
     const querySnapshot = await db.collection("moods").where("userID", "==", userID).get();
     querySnapshot.forEach((doc) => {
-      moods.push(doc.data());
+      const data = doc.data();
+      data.timestamp = data.timestamp.toDate();
+      moods.push(data);
     });
     res.status(200).send(moods);
   } catch (e) {
