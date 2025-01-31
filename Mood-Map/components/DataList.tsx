@@ -1,7 +1,7 @@
-import { Text, View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import { useState, useEffect } from "react";
 import { Mood } from "../types";
-import { PrettyDate } from "@/utilities/PrettyDate";
+import DataListItem from "./DataListItem";
 
 export default function DataList() {
   const [moods, setMoods] = useState<Mood[]>([]);
@@ -24,17 +24,13 @@ export default function DataList() {
     getMoods();
   }, []);
 
+  const filteredMoods = moods.filter(mood => mood.mood >= 8);
+
   return (
     <View style={styles.container}>
       <ScrollView>
-        {moods.map((mood, index) => (
-          <View key={index} style={styles.listItem}>
-            <Text>{mood.mood}</Text>
-            <Text>{mood.description}</Text>
-            <Text style={styles.timestampText}>
-              Timestamp: {PrettyDate(new Date(mood.timestamp))}
-            </Text>
-          </View>
+        {filteredMoods.map((mood, index) => (
+          <DataListItem key={index} mood={mood} />
         ))}
       </ScrollView>
     </View>
@@ -45,7 +41,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    paddingHorizontal: 20,
+    paddingHorizontal: 5,
   },
   listItem: {
     padding: 10,
