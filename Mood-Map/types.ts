@@ -3,3 +3,12 @@ export interface Mood {
   description: string;
   timestamp: Date;
 }
+
+export interface CustomDate {
+  weekday: String;
+  month: String;
+  day: Number;
+  suffix: String;
+  year: Number;
+  time: String;
+}
