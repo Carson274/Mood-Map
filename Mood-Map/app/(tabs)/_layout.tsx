@@ -44,6 +44,15 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="quotes"
+        options={{
+          title: 'Quotes',
+          tabBarIcon: ({ color, focused }) => (
+            <IconSymbol size={28} name={focused ? "message.fill" : "message"} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
