@@ -4,6 +4,12 @@ export interface Mood {
   timestamp: Date;
 }
 
+export interface Quote {
+  quote: string;
+  author: string;
+  timestamp: Date;
+}
+
 export interface CustomDate {
   weekday: String;
   month: String;
